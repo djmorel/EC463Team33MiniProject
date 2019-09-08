@@ -1,6 +1,6 @@
 package team33.ec463.com.ec463team33miniproject;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class Login extends AppCompatActivity {
