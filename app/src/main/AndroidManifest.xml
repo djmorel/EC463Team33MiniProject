@@ -16,6 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Rooms" />
+        <activity android:name=".AddRoom" />
+        <activity
+            android:name=".Devices"
+            android:label="@string/title_activity_devices"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
