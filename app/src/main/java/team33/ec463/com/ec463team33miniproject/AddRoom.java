@@ -39,11 +39,17 @@ public class AddRoom extends AppCompatActivity {
                 // Record the Room Nickname text
                 String nickname = roomNickname_text.getText().toString();
 
-                // Return to the Rooms Activity while passing the text for a new room
-                Intent roomsIntent = new Intent(getApplicationContext(), Rooms.class);
-                roomsIntent.putExtra("roomNickname", nickname);
-                startActivity(roomsIntent);
+                // Make sure the room name isn't empty
+                if(roomNickname_text.getText().toString().trim().length() != 0)
+                {
+                    // Return to the Rooms Activity while passing the text for a new room
+                    Intent roomsIntent = new Intent(getApplicationContext(), Rooms.class);
+                    roomsIntent.putExtra("roomNickname", nickname);
+                    startActivity(roomsIntent);
+                }
             }
+
+
         }));
     }
 }

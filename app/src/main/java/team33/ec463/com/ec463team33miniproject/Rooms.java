@@ -24,15 +24,23 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Rooms extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    // Assign roomNames to whatever is in FireBase
+       // For now, default it to an empty list
+    ArrayList<String> roomNames = new ArrayList<>();  // As of now, this resets list when the page opens...
+
+    ArrayAdapter<String> adapter;
     ListView roomList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //~~~~~~~~~~ Beginning of Navigation Drawer default setup ~~~~~~~~~~//
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rooms);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -57,22 +65,25 @@ public class Rooms extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        //~~~~~~~~~~ End of Navigation Drawer default setup ~~~~~~~~~~//
 
 
-        // Handle the test Nickname data pass
-        TextView roomNickname_textview = (TextView) findViewById(R.id.roomNickname_textview);
-        Intent intent = getIntent();
-        String nickname = intent.getStringExtra("roomNickname");
-        roomNickname_textview.setText(nickname);
-
+        //~~~~~~~~~~ Beginning of Adjustable ListView setup ~~~~~~~~~~//
 
         // ListView setup
         roomList = (ListView) findViewById(R.id.roomList);
 
-        // Create Array Adapter
-        ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(Rooms.this,
-                android.R.layout.simple_list_item_1,
-                getResources().getStringArray(R.array.rooms));
+        // Setup the Array Adapter
+        adapter = new ArrayAdapter<String>(Rooms.this, android.R.layout.simple_list_item_1,
+                roomNames);
+
+        // Add Room Name to the ListView
+        String nickname = getIntent().getStringExtra("roomNickname");
+        if(nickname != null)
+        {
+            roomNames.add(nickname);
+            adapter.notifyDataSetChanged();
+        }
 
         // Make the list view interactive
         roomList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -83,7 +94,9 @@ public class Rooms extends AppCompatActivity
                 startActivity(roomDetailsIntent);
             }
         });
-        roomList.setAdapter(mAdapter);
+        roomList.setAdapter(adapter);
+
+        //~~~~~~~~~~ End of Adjustable ListView setup ~~~~~~~~~~//
 
     }
 
@@ -102,21 +115,6 @@ public class Rooms extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.rooms, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

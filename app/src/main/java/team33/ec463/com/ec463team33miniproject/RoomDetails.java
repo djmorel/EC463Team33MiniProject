@@ -90,6 +90,23 @@ public class RoomDetails extends AppCompatActivity
         {
             targetRoomName.setText(roomBundle.getString("RoomName"));
         }
+
+        // Implement the deleteRoom_button
+        deleteRoom_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String room_delete = targetRoomName.getText().toString();
+
+                // Search the user's list of rooms for the specified room
+
+                // Remove the current room from the list
+
+                // Return to the Rooms page
+                Intent roomsIntent = new Intent(getApplicationContext(), Rooms.class);
+                startActivity(roomsIntent);
+            }
+        });
     }
 
     @Override
@@ -107,21 +124,6 @@ public class RoomDetails extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.room_details, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
