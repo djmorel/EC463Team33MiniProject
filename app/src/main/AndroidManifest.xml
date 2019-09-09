@@ -16,12 +16,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Rooms" />
-        <activity android:name=".AddRoom" />
+        <activity
+            android:name=".AddRoom"
+            android:label="Add Room"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".Devices"
             android:label="@string/title_activity_devices"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Rooms"
+            android:label="@string/title_activity_rooms"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".RoomDetails"></activity>
     </application>
 
 </manifest>

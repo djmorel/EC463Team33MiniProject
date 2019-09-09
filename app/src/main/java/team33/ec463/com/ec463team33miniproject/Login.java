@@ -18,12 +18,13 @@ public class Login extends AppCompatActivity {
         GoogleLogin_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Testing, using Devices NOT Rooms now...
-                Intent homeIntent = new Intent(getApplicationContext(), Devices.class);
 
-                // Pass Google Username
-
+                // Go to the Rooms Activity as the default homepage
+                Intent homeIntent = new Intent(getApplicationContext(), Rooms.class);
                 startActivity(homeIntent);
+
+                // Pass Google Username to be used in drawer menu
+
             }
         });
     }

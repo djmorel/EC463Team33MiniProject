@@ -1,5 +1,6 @@
 package team33.ec463.com.ec463team33miniproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,6 +30,7 @@ public class Devices extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setImageResource(R.drawable.ic_plus_sign);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,23 +87,25 @@ public class Devices extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_rooms) {
-            // Handle the camera action
-        } else if (id == R.id.nav_devices) {
-
-        } else if (id == R.id.nav_signout) {
-
+        if (id == R.id.nav_rooms)
+        {
+            // Go to the Rooms page
+            Intent roomsIntent = new Intent(getApplicationContext(), Rooms.class);
+            startActivity(roomsIntent);
+        }
+        else if (id == R.id.nav_devices)
+        {
+            // Go to the Devices page
+            Intent devicesIntent = new Intent(getApplicationContext(), Devices.class);
+            startActivity(devicesIntent);
+        }
+        else if (id == R.id.nav_signout)
+        {
+            // Go to Login page
+            Intent signoutIntent = new Intent(getApplicationContext(), Login.class);
+            startActivity(signoutIntent);
         }
 
-        /*
-        else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-        */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
