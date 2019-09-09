@@ -49,13 +49,13 @@ public class Login extends AppCompatActivity {
     }
 
     public void addNewDevice(String name, String type, int idVal, String room){
-        //create new room with a name
+        //create new device with a name, type, and ID
         Map<String, Object> device = new HashMap<>();
         device.put("Name", name);
         device.put("Type", type);
         device.put("ID", idVal);
 
-        // Add new room to collection with a new ID
+        // Add new device to subcollection of specified room with a new ID
         datab.collection("rooms").document(room).collection("devices")
                 .add(device)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -73,6 +73,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void deleteDevice(String name, String room) {
+        //delete device from specified room subcollection
         datab.collection("rooms").document(room).collection("devices").document(name)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -90,6 +91,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void deleteRoom(String room) {
+        //delete room from collection
         datab.collection("rooms").document(room)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
