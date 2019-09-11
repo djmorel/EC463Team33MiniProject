@@ -3,16 +3,25 @@ package team33.ec463.com.ec463team33miniproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
-public class EditDevice extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class EditDevice extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +39,7 @@ public class EditDevice extends AppCompatActivity {
         TextView deviceIDLabel_textview = (TextView) findViewById(R.id.deviceIDLabel_textview);
         TextView devicePrintedID_textview = (TextView) findViewById(R.id.devicePrintedID_textview);
         TextView assignedRoom_textview = (TextView) findViewById(R.id.assignedRoom_textview);
-        Spinner assignedRoom_Spinner = (Spinner) findViewById(R.id.assignedRoom_Spinner);
+        final Spinner assignedRoom_Spinner = (Spinner) findViewById(R.id.assignedRoom_Spinner);
 
         // Set errorDeviceName_textview to invisible by default
         errorDeviceName_textview.setVisibility(View.INVISIBLE);
@@ -77,7 +86,65 @@ public class EditDevice extends AppCompatActivity {
             }
         });
 
+        // Pull the list of devices from the user's account
+        // TODO
+        // For now, default to a simple list
+        String[] sampleRooms = new String[] {
+                "Select a room",
+                "Kitchen",
+                "Bedroom",
+                "Garage"
+        };
 
 
+        final List<String> roomList = new ArrayList<>(Arrays.asList(sampleRooms));  // Switch sampleRooms with database
+
+        ArrayAdapter<String> adapter =  new ArrayAdapter<String>(EditDevice.this, android.R.layout.simple_spinner_item,
+                roomList){
+            // Disables hint
+            @Override
+            public boolean isEnabled(int position) {
+                if (position == 0) {
+                    // Disable first item (hint) from spinner)
+                    return false;
+                } else
+                {
+                    return true;
+                }
+            }
+
+            // Handles option color
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent){
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0)
+                {
+                    // Set hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else
+                {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        assignedRoom_Spinner.setAdapter(adapter);
+        assignedRoom_Spinner.setOnItemSelectedListener(this);
+
+    }
+
+    // Override methods to support the Adapter's OnItemSelectedListener
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String text = parent.getItemAtPosition(position).toString();
+        Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Ignore
     }
 }
