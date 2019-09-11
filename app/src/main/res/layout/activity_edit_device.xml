@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditDevice">
+
+    <Button
+        android:id="@+id/removeDevice_Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Remove Device"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/doneDevice_Button"
+        app:layout_constraintHorizontal_bias="0.45"
+        app:layout_constraintStart_toStartOf="@+id/doneDevice_Button"
+        app:layout_constraintTop_toBottomOf="@+id/assignedRoom_textview"
+        app:layout_constraintVertical_bias="0.086" />
+
+    <Button
+        android:id="@+id/doneDevice_Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="104dp"
+        android:text="Done"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/removeDevice_Button"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/deviceNickname_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:inputType="text"
+        android:maxLength="30"
+        app:layout_constraintBottom_toBottomOf="@+id/deviceNickname_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/deviceNickname_textview"
+        app:layout_constraintVertical_bias="0.241" />
+
+    <TextView
+        android:id="@+id/deviceNickname_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Nickname"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.172" />
+
+    <TextView
+        android:id="@+id/errorDeviceName_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Enter a Name"
+        android:textColor="#F00"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/deviceNickname_text"
+        app:layout_constraintEnd_toEndOf="@+id/deviceNickname_text"
+        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintStart_toStartOf="@+id/deviceNickname_text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/deviceType_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:text="Type"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/deviceNickname_textview"
+        app:layout_constraintTop_toBottomOf="@+id/deviceNickname_textview" />
+
+    <TextView
+        android:id="@+id/deviceSensorType_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thermometer"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/deviceType_textview"
+        app:layout_constraintEnd_toEndOf="@+id/deviceNickname_text"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/deviceNickname_text"
+        app:layout_constraintTop_toTopOf="@+id/deviceType_textview"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/deviceIDLabel_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:text="ID"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/deviceType_textview"
+        app:layout_constraintTop_toBottomOf="@+id/deviceType_textview" />
+
+    <TextView
+        android:id="@+id/devicePrintedID_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="01234567890ab"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/deviceIDLabel_textview"
+        app:layout_constraintEnd_toEndOf="@+id/deviceSensorType_textview"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/deviceSensorType_textview"
+        app:layout_constraintTop_toTopOf="@+id/deviceIDLabel_textview"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/assignedRoom_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        android:text="Assigned Room"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/deviceIDLabel_textview"
+        app:layout_constraintTop_toBottomOf="@+id/deviceIDLabel_textview"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Spinner
+        android:id="@+id/assignedRoom_Spinner"
+        android:layout_width="200dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/assignedRoom_textview"
+        app:layout_constraintEnd_toEndOf="@+id/devicePrintedID_textview"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/devicePrintedID_textview"
+        app:layout_constraintTop_toTopOf="@+id/assignedRoom_textview"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

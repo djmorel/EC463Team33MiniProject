@@ -32,6 +32,7 @@ public class Rooms extends AppCompatActivity
 
     // Assign roomNames to whatever is in FireBase
        // For now, default it to an empty list
+    // TODO
     ArrayList<String> roomNames = new ArrayList<>();  // As of now, this resets list when the page opens...
 
     ArrayAdapter<String> adapter;

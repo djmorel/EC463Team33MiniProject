@@ -24,6 +24,7 @@ public class Login extends AppCompatActivity {
                 startActivity(homeIntent);
 
                 // Pass Google Username to be used in drawer menu
+                // TODO
 
             }
         });
