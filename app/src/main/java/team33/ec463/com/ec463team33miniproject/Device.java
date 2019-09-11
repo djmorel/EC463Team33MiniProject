@@ -11,6 +11,22 @@ public class Device {
 
     public Device(){}
 
+    public void setName(String newName){
+        name = newName;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public int getIdVal(){
+        return idVal;
+    }
+
+    public String getType(){
+        return type;
+    }
+
     public Device(String myName, String myType, int myIdVal){
         name = myName;
         type = myType;
