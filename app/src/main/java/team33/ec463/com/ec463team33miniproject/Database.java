@@ -17,10 +17,16 @@ public class Database {
 
     private static final String RTAG = "Rooms";
     private static final String DTAG = "Devices";
+    private FirebaseFirestore datab;
+
+    public Database(FirebaseFirestore db){
+        datab = db;
+    }
     /////////////////////////////////////////////////////////
     /////////////DATABASE CODE///////////////////////////////
     /////////////////////////////////////////////////////////
-    private FirebaseFirestore datab = FirebaseFirestore.getInstance();
+
+
     public void addNewRoom(String name) {
         //create new room with a name
         Map<String, Object> room = new HashMap<>();
