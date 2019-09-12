@@ -54,7 +54,7 @@ public class AddRoom extends AppCompatActivity {
                     errorName_textview.setVisibility(View.INVISIBLE);
 
                     // Save the Room to the user's account
-                    // TODO
+                    Rooms.AppDB.addNewRoom(nickname);
 
                     // Return to the Rooms Activity while passing the text for a new room
                     Intent roomsIntent = new Intent(getApplicationContext(), Rooms.class);
@@ -66,8 +66,6 @@ public class AddRoom extends AppCompatActivity {
                     errorName_textview.setVisibility(View.VISIBLE);
                 }
             }
-
-
         }));
     }
 }

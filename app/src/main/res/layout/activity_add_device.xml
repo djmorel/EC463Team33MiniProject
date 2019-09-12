@@ -10,9 +10,9 @@
         android:id="@+id/cancel_adddev_Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
         android:text="Cancel"
         android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@+id/done_adddev_Button"
@@ -26,25 +26,26 @@
         android:id="@+id/done_adddev_Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="176dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="176dp"
         android:text="Done"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.534"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.732" />
+        app:layout_constraintVertical_bias="0.977" />
 
     <EditText
         android:id="@+id/deviceID_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="21dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="21dp"
         android:ems="10"
         android:inputType="text"
         android:maxLength="15"
@@ -52,16 +53,54 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/deviceID_textview"
         app:layout_constraintTop_toTopOf="@+id/deviceID_textview"
-        app:layout_constraintVertical_bias="0.413" />
+        app:layout_constraintVertical_bias="0.344" />
+
+    <EditText
+        android:id="@+id/deviceNickname_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginStart="150dp"
+        android:ems="10"
+        android:inputType="text"
+        android:maxLength="30"
+        app:layout_constraintBottom_toBottomOf="@+id/deviceNickname_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/deviceNickname_textview"
+        app:layout_constraintVertical_bias="0.275" />
+
+    <Spinner
+        android:id="@+id/assignedRoom_Spinner"
+        android:layout_width="200dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="452dp"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="254dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/deviceType_Spinner"
+        android:layout_width="200dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="407dp"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="299dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/deviceID_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:text="Device ID"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -69,15 +108,15 @@
         app:layout_constraintHorizontal_bias="0.38"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.172" />
+        app:layout_constraintVertical_bias="0.127" />
 
     <TextView
         android:id="@+id/invalidID_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
         android:text="Invalid ID"
         android:textColor="#F00"
         android:textSize="16sp"
@@ -87,5 +126,62 @@
         app:layout_constraintStart_toStartOf="@+id/deviceID_text"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/deviceNickname_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="Nickname"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.256" />
+
+    <TextView
+        android:id="@+id/errorDeviceName_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Enter a Name"
+        android:textColor="#F00"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/deviceNickname_text"
+        app:layout_constraintEnd_toEndOf="@+id/deviceNickname_text"
+        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintStart_toStartOf="@+id/deviceNickname_text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/assignedRoom_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="452dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="255dp"
+        android:text="Assigned Room"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/deviceType_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="407dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="300dp"
+        android:text="Device Type"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

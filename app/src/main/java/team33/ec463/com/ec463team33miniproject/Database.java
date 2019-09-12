@@ -48,7 +48,7 @@ public class Database {
                 });
     }
 
-    public void addNewDevice(final Device newDev, String room){
+    public void addNewDevice(final Device newDev){
         //create new device with a name, type, and ID
         Map<String, Object> device = new HashMap<>();
         device.put("Name", newDev.name);
@@ -57,7 +57,7 @@ public class Database {
         device.put("data", newDev.data);
         device.put("device", newDev);
         // Add new device to subcollection of specified room with a new ID
-        datab.collection("rooms").document(room).collection("devices")
+        datab.collection("rooms").document(newDev.getRoom()).collection("devices")
                 .add(device)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -72,7 +72,7 @@ public class Database {
                     }
                 });
         //add a snapshot listener whenever a new device is added to listen for new data
-        final DocumentReference deviceRef = datab.collection("rooms").document(room).collection("devices").document(newDev.name);
+        final DocumentReference deviceRef = datab.collection("rooms").document(newDev.getRoom()).collection("devices").document(newDev.name);
         deviceRef
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override

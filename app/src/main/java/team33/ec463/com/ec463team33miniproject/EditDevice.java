@@ -70,7 +70,6 @@ public class EditDevice extends AppCompatActivity implements AdapterView.OnItemS
                     // Remove the name error message (if even present)
                     errorDeviceName_textview.setVisibility(View.INVISIBLE);
 
-                    // TODO
                     // Save the settings to the user's account
 
                     // Return to the Devices Activity
@@ -132,7 +131,8 @@ public class EditDevice extends AppCompatActivity implements AdapterView.OnItemS
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         assignedRoom_Spinner.setAdapter(adapter);
         assignedRoom_Spinner.setOnItemSelectedListener(this);
-
+        //TODO
+        //update fields in device object
     }
 
     // Override methods to support the Adapter's OnItemSelectedListener

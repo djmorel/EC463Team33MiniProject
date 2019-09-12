@@ -10,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -34,7 +35,8 @@ public class Rooms extends AppCompatActivity
     // For now, default it to an empty list
     // TODO
     ArrayList<String> roomNames = new ArrayList<>();  // As of now, this resets list when the page opens...
-
+    static FirebaseFirestore datab = FirebaseFirestore.getInstance();
+    static Database AppDB = new Database(datab);
     ArrayAdapter<String> adapter;
     ListView roomList;
 
