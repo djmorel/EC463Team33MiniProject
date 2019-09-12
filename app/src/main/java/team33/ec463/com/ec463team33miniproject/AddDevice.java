@@ -23,7 +23,7 @@ import java.util.List;
 
 public class AddDevice extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    final Device newDev = new Device();
+    //final Device newDev = new Device();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +79,7 @@ public class AddDevice extends AppCompatActivity implements AdapterView.OnItemSe
                         validID = true;
 
                         // Record the sensor in the user's account on Firebase
-                        newDev.setIdVal(deviceID);
+                        //newDev.setIdVal(deviceID);
                     }
 
                     // Handle valid and invalid device IDs
@@ -114,7 +114,7 @@ public class AddDevice extends AppCompatActivity implements AdapterView.OnItemSe
                     errorDeviceName_textview.setVisibility(View.INVISIBLE);
 
                     //set device name
-                    newDev.setName(nickname);
+                    //newDev.setName(nickname);
                 }
                 else
                 {
@@ -209,17 +209,17 @@ public class AddDevice extends AppCompatActivity implements AdapterView.OnItemSe
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         deviceType_Spinner.setAdapter(typeAdapter);
         deviceType_Spinner.setOnItemSelectedListener(this);
-        Rooms.AppDB.addNewDevice(newDev);
+        //Rooms.AppDB.addNewDevice(newDev);
     }
 
     // Override methods to support the Adapter's OnItemSelectedListener
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String text = parent.getItemAtPosition(position).toString();
-        if(parent.getId() == R.id.deviceType_Spinner)
+        /*if(parent.getId() == R.id.deviceType_Spinner)
             newDev.setType(text);
         else if(parent.getId() == R.id.assignedRoom_Spinner)
-            newDev.setRoom(text);
+            newDev.setRoom(text);*/
         Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
