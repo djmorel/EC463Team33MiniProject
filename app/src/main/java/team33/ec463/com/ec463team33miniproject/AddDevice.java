@@ -1,10 +1,13 @@
 package team33.ec463.com.ec463team33miniproject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -14,38 +17,43 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddDevice extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    //final Device newDev = new Device();
+    final EditText deviceNickname_text = (EditText) findViewById(R.id.deviceNickname_text);
+    TextView deviceNickname_textview = (TextView) findViewById(R.id.deviceNickname_textview);
+    final TextView errorDeviceName_textview = (TextView) findViewById(R.id.errorDeviceName_textview);
+    TextView assignedRoom_textview = (TextView) findViewById(R.id.assignedRoom_textview);
+    final Spinner assignedRoom_Spinner = (Spinner) findViewById(R.id.assignedRoom_Spinner);
+    TextView deviceType_textview = (TextView) findViewById(R.id.deviceType_textview);
+    final Spinner deviceType_Spinner = (Spinner) findViewById(R.id.deviceType_Spinner);
+    TextView deviceID_textview = (TextView) findViewById(R.id.deviceID_textview);
+    final EditText deviceID_text = (EditText) findViewById(R.id.deviceID_text);
+    final TextView invalidID_textview = (TextView) findViewById(R.id.invalidID_textview);
+    private static final String DTAG = "Devices";
+    private static final String RTAG = "Rooms";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_device);
 
-        final EditText deviceNickname_text = (EditText) findViewById(R.id.deviceNickname_text);
-        TextView deviceNickname_textview = (TextView) findViewById(R.id.deviceNickname_textview);
-        final TextView errorDeviceName_textview = (TextView) findViewById(R.id.errorDeviceName_textview);
-        TextView assignedRoom_textview = (TextView) findViewById(R.id.assignedRoom_textview);
-        final Spinner assignedRoom_Spinner = (Spinner) findViewById(R.id.assignedRoom_Spinner);
-        TextView deviceType_textview = (TextView) findViewById(R.id.deviceType_textview);
-        final Spinner deviceType_Spinner = (Spinner) findViewById(R.id.deviceType_Spinner);
 
-        // Create a reference to the deviceID_textview
-        TextView deviceID_textview = (TextView) findViewById(R.id.deviceID_textview);
-
-        // Create a reference to the deviceID_text field
-        final EditText deviceID_text = (EditText) findViewById(R.id.deviceID_text);
-
-        // Create a reference to the Invalid ID error TextView
-        final TextView invalidID_textview = (TextView) findViewById(R.id.invalidID_textview);
         invalidID_textview.setVisibility(View.INVISIBLE);
+        errorDeviceName_textview.setVisibility(View.INVISIBLE);
 
         // Create an reference to the Cancel button, and make it functional
         Button cancel_adddev_Button = (Button) findViewById(R.id.cancel_adddev_Button);
@@ -79,7 +87,6 @@ public class AddDevice extends AppCompatActivity implements AdapterView.OnItemSe
                         validID = true;
 
                         // Record the sensor in the user's account on Firebase
-                        //newDev.setIdVal(deviceID);
                     }
 
                     // Handle valid and invalid device IDs
@@ -113,8 +120,10 @@ public class AddDevice extends AppCompatActivity implements AdapterView.OnItemSe
                     // Turn off name error
                     errorDeviceName_textview.setVisibility(View.INVISIBLE);
 
+                    addDevice();
                     //set device name
-                    //newDev.setName(nickname);
+                    Intent devicesIntent = new Intent(getApplicationContext(), Devices.class);
+                    startActivity(devicesIntent);
                 }
                 else
                 {
@@ -134,6 +143,7 @@ public class AddDevice extends AppCompatActivity implements AdapterView.OnItemSe
         };
 
         String[] deviceTypes = new String[]{
+                "Select device type",
                 "Thermometer",
                 "Hygrometer"
         };
@@ -209,23 +219,64 @@ public class AddDevice extends AppCompatActivity implements AdapterView.OnItemSe
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         deviceType_Spinner.setAdapter(typeAdapter);
         deviceType_Spinner.setOnItemSelectedListener(this);
-        //Rooms.AppDB.addNewDevice(newDev);
     }
 
     // Override methods to support the Adapter's OnItemSelectedListener
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String text = parent.getItemAtPosition(position).toString();
-        /*if(parent.getId() == R.id.deviceType_Spinner)
-            newDev.setType(text);
-        else if(parent.getId() == R.id.assignedRoom_Spinner)
-            newDev.setRoom(text);*/
-        Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         // Ignore
+    }
+
+    private void addDevice(){
+        String idVal = deviceID_text.getText().toString();
+        String name = deviceNickname_text.getText().toString();
+        String room = assignedRoom_Spinner.getOnItemSelectedListener().toString();
+        final String type = deviceType_Spinner.getOnItemSelectedListener().toString();
+
+        Map<String, Object> newDev = new HashMap<>();
+        newDev.put("Name", name);
+        newDev.put("Device ID", idVal);
+        newDev.put("Device Type", type);
+        newDev.put("Assigned Room", room);
+
+        Rooms.datab.collection("Rooms").document(room).collection("Devices").add(newDev)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentRef) {
+                        Log.d(DTAG, "Added new device with ID: " + documentRef.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(DTAG, "Could not add new device", e);
+                    }
+                });
+        //add a snapshot listener whenever a new device is added to listen for new data
+        final DocumentReference deviceRef = Rooms.datab.collection("rooms").document(room).collection("devices").document(name);
+        deviceRef
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot deviceSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(RTAG, "Failed to listen", e);
+                            return;
+                        }
+                        if(deviceSnapshot != null && deviceSnapshot.exists() && (type.equals("Thermometer"))){
+                            Log.d(DTAG, "Current temperature: " + deviceSnapshot.get("data"));
+                        }else if(deviceSnapshot != null && deviceSnapshot.exists() && (type.equals("Hygrometer"))){
+                            Log.d(DTAG, "Current humidity: " + deviceSnapshot.get("data"));
+                        }else{
+                            Log.d(DTAG, "Null");
+                        }
+                    }
+                });
     }
 
 }

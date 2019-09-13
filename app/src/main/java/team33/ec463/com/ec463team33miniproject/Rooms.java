@@ -36,7 +36,6 @@ public class Rooms extends AppCompatActivity
     // TODO
     ArrayList<String> roomNames = new ArrayList<>();  // As of now, this resets list when the page opens...
     static FirebaseFirestore datab = FirebaseFirestore.getInstance();
-    static Database AppDB = new Database(datab);
     ArrayAdapter<String> adapter;
     ListView roomList;
 

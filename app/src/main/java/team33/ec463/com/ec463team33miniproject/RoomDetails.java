@@ -3,18 +3,23 @@ package team33.ec463.com.ec463team33miniproject;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentReference;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -24,6 +29,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class RoomDetails extends AppCompatActivity
@@ -33,6 +39,9 @@ public class RoomDetails extends AppCompatActivity
     LineGraphSeries<DataPoint> series;
     TextView targetRoomName;
     Button deleteRoom_button;
+    final TextView roomNickname_text = (TextView) findViewById(R.id.targetRoomName_textview);
+
+    private static final String RTAG = "Rooms";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,5 +163,25 @@ public class RoomDetails extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void deleteRoom() {
+        String name = roomNickname_text.getText().toString();
+        //delete device from specified room subcollection
+        final DocumentReference deviceRef = Rooms.datab.collection("rooms").document(name);
+        deviceRef
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(RTAG, "Device was deleted");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(RTAG, "Device was not deleted");
+                    }
+                });
     }
 }
