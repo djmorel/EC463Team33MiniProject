@@ -8,13 +8,15 @@ import android.widget.Button;
 
 public class Login extends AppCompatActivity {
 
+    Button GoogleLogin_Button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         // Create a reference to the Login Button
-        Button GoogleLogin_Button = (Button) findViewById(R.id.GoogleLogin_Button);
+        GoogleLogin_Button = (Button) findViewById(R.id.GoogleLogin_Button);
         GoogleLogin_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

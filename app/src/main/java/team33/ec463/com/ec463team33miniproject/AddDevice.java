@@ -1,35 +1,49 @@
 package team33.ec463.com.ec463team33miniproject;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AddDevice extends AppCompatActivity {
+
+    private TextView deviceID_textview;
+    private EditText deviceID_text;
+    private TextView invalidID_textview;
+    private Button cancel_adddev_Button;
+    private Button done_adddev_Button;
+    private FirebaseFirestore datab = FirebaseFirestore.getInstance();
+    private static final String RTAG = "Rooms";
+    private static final String DTAG = "Devices";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_device);
 
-        // Create a reference to the deviceID_textview
-        TextView deviceID_textview = (TextView) findViewById(R.id.deviceID_textview);
+        deviceID_textview = (TextView) findViewById(R.id.deviceID_textview);
+        deviceID_text = (EditText) findViewById(R.id.deviceID_text);
+        invalidID_textview = (TextView) findViewById(R.id.invalidID_textview);
+        cancel_adddev_Button = (Button) findViewById(R.id.cancel_adddev_Button);
+        done_adddev_Button = (Button) findViewById(R.id.done_adddev_Button);
 
-        // Create a reference to the deviceID_text field
-        final EditText deviceID_text = (EditText) findViewById(R.id.deviceID_text);
-
-        // Create a reference to the Invalid ID error TextView
-        final TextView invalidID_textview = (TextView) findViewById(R.id.invalidID_textview);
         invalidID_textview.setVisibility(View.INVISIBLE);
-
-        // Create an reference to the Cancel button, and make it functional
-        Button cancel_adddev_Button = (Button) findViewById(R.id.cancel_adddev_Button);
         cancel_adddev_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,7 +55,6 @@ public class AddDevice extends AppCompatActivity {
         });
 
         // Create a reference to the Done button, and make it functional
-        Button done_adddev_Button = (Button) findViewById(R.id.done_adddev_Button);
         done_adddev_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +73,7 @@ public class AddDevice extends AppCompatActivity {
                         validID = true;
 
                         // Record the sensor in the user's account on Firebase
+                        addNewDevice();
                     }
 
                     // Handle valid and invalid device IDs
@@ -85,7 +99,31 @@ public class AddDevice extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    private void addNewDevice(){
+        deviceID_text = (EditText) findViewById(R.id.deviceID_text);
+        String devID = deviceID_text.getText().toString();
+        Map<String, Object> newDev = new HashMap<>();
+        newDev.put("Device ID", devID);
+        newDev.put("Name", "");
+        newDev.put("Assigned Room", "");
+        newDev.put("Device Type", "");
+        newDev.put("Data", 0);
 
+        datab.collection("New Devices")
+                .add(newDev)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(DTAG, "Created new device");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(DTAG, "Could not create new device");
+                    }
+                });
     }
 }

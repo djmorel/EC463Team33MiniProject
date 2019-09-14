@@ -3,18 +3,24 @@ package team33.ec463.com.ec463team33miniproject;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -24,39 +30,51 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class RoomDetails extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     // Instantiate the layout types
-    LineGraphSeries<DataPoint> series;
-    TextView targetRoomName;
-    Button deleteRoom_button;
+    private LineGraphSeries<DataPoint> series;
+    private TextView targetRoomName;
+    private Button deleteRoom_button;
+    private Toolbar toolbar;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private GraphView graph;
+    private FirebaseFirestore datab = FirebaseFirestore.getInstance();
+    private static final String RTAG = "Rooms";
+    private static final String DTAG = "Devices";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_details);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // Connect the layout elements to variables
+        targetRoomName = (TextView) findViewById(R.id.targetRoomName_textview);
+        deleteRoom_button = (Button) findViewById(R.id.deleteRoom_Button);
 
         // Data values for the plot
         double x = 1.0;
         double y;
         double[] temp = new double[]{349, 344, 339, 334, 331, 327, 325, 323, 321, 338, 340, 341, 346, 342, 344};
 
-        GraphView graph = (GraphView) findViewById(R.id.graph);
+        graph = (GraphView) findViewById(R.id.graph);
         series = new LineGraphSeries<DataPoint>();
         for(int i = 0; i < 15; i++)
         {
@@ -80,9 +98,7 @@ public class RoomDetails extends AppCompatActivity
             }
         });
 
-        // Connect the layout elements to variables
-        targetRoomName = (TextView) findViewById(R.id.targetRoomName_textview);
-        deleteRoom_button = (Button) findViewById(R.id.deleteRoom_Button);
+
 
         // Get Room Name
         Bundle roomBundle = getIntent().getExtras();
@@ -101,6 +117,7 @@ public class RoomDetails extends AppCompatActivity
                 // Search the user's list of rooms for the specified room
 
                 // Remove the current room from the list
+                deleteRoom();
 
                 // Return to the Rooms page
                 Intent roomsIntent = new Intent(getApplicationContext(), Rooms.class);
@@ -154,5 +171,26 @@ public class RoomDetails extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void deleteRoom(){
+        targetRoomName = (TextView) findViewById(R.id.targetRoomName_textview);
+        String roomName = targetRoomName.getText().toString();
+
+        DocumentReference room = datab.collection("rooms").document(roomName);
+        room
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(RTAG, "Deleted room");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(RTAG, "Could not delete room", e);
+                    }
+                });
     }
 }

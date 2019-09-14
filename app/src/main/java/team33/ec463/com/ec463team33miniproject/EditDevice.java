@@ -1,9 +1,11 @@
 package team33.ec463.com.ec463team33miniproject;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -14,6 +16,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -22,23 +29,37 @@ import java.util.List;
 
 public class EditDevice extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    private Button removeDevice_Button;
+    private Button doneDevice_Button;
+    private EditText deviceNickname_text;
+    private TextView deviceNickname_textview;
+    private TextView errorDeviceName_textview;
+    private TextView deviceType_textview;
+    private TextView deviceSensorType_textview;
+    private TextView deviceIDLabel_textview;
+    private TextView devicePrintedID_textview;
+    private TextView assignedRoom_textview;
+    private Spinner assignedRoom_Spinner;
+    private FirebaseFirestore datab = FirebaseFirestore.getInstance();
+    private static final String RTAG = "Rooms";
+    private static final String DTAG = "Devices";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_device);
 
-        // Create references for all of the layout elements
-        Button removeDevice_Button = (Button) findViewById(R.id.removeDevice_Button);
-        Button doneDevice_Button = (Button) findViewById(R.id.doneDevice_Button);
-        final EditText deviceNickname_text = (EditText) findViewById(R.id.deviceNickname_text);
-        TextView deviceNickname_textview = (TextView) findViewById(R.id.deviceNickname_textview);
-        final TextView errorDeviceName_textview = (TextView) findViewById(R.id.errorDeviceName_textview);
-        TextView deviceType_textview = (TextView) findViewById(R.id.deviceType_textview);
-        TextView deviceSensorType_textview = (TextView) findViewById(R.id.deviceSensorType_textview);
-        TextView deviceIDLabel_textview = (TextView) findViewById(R.id.deviceIDLabel_textview);
-        TextView devicePrintedID_textview = (TextView) findViewById(R.id.devicePrintedID_textview);
-        TextView assignedRoom_textview = (TextView) findViewById(R.id.assignedRoom_textview);
-        final Spinner assignedRoom_Spinner = (Spinner) findViewById(R.id.assignedRoom_Spinner);
+        removeDevice_Button = (Button) findViewById(R.id.removeDevice_Button);
+        doneDevice_Button = (Button) findViewById(R.id.doneDevice_Button);
+        deviceNickname_text = (EditText) findViewById(R.id.deviceNickname_text);
+        deviceNickname_textview = (TextView) findViewById(R.id.deviceNickname_textview);
+        errorDeviceName_textview = (TextView) findViewById(R.id.errorDeviceName_textview);
+        deviceType_textview = (TextView) findViewById(R.id.deviceType_textview);
+        deviceSensorType_textview = (TextView) findViewById(R.id.deviceSensorType_textview);
+        deviceIDLabel_textview = (TextView) findViewById(R.id.deviceIDLabel_textview);
+        devicePrintedID_textview = (TextView) findViewById(R.id.devicePrintedID_textview);
+        assignedRoom_textview = (TextView) findViewById(R.id.assignedRoom_textview);
+        assignedRoom_Spinner = (Spinner) findViewById(R.id.assignedRoom_Spinner);
 
         // Set errorDeviceName_textview to invisible by default
         errorDeviceName_textview.setVisibility(View.INVISIBLE);
@@ -53,6 +74,7 @@ public class EditDevice extends AppCompatActivity implements AdapterView.OnItemS
 
                 // TODO
                 // Search the user's account for the device, then remove it
+                deleteDevice();
 
                 // Return to the Devices Activity
                 Intent devicesIntent = new Intent(getApplicationContext(), Devices.class);
@@ -72,6 +94,7 @@ public class EditDevice extends AppCompatActivity implements AdapterView.OnItemS
 
                     // TODO
                     // Save the settings to the user's account
+                    editDevice();
 
                     // Return to the Devices Activity
                     Intent devicesIntent = new Intent(getApplicationContext(), Devices.class);
@@ -145,5 +168,67 @@ public class EditDevice extends AppCompatActivity implements AdapterView.OnItemS
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         // Ignore
+    }
+
+    private void editDevice(){
+        deviceNickname_text = (EditText) findViewById(R.id.deviceNickname_text);
+        assignedRoom_Spinner = (Spinner) findViewById(R.id.assignedRoom_Spinner);
+        devicePrintedID_textview = (TextView) findViewById(R.id.devicePrintedID_textview);
+        String devName = deviceNickname_text.getText().toString();
+        String devRoom = assignedRoom_Spinner.getOnItemSelectedListener().toString();
+        String devID = devicePrintedID_textview.getText().toString();
+
+        DocumentReference device = datab.collection("New Devices").document(devID);
+        device.update("Name", devName);
+        device.update("Assigned Room", devRoom)
+        .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(DTAG, "Device successfully updated");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(DTAG, "Could not update device", e);
+            }
+        });
+
+        datab.collection("rooms").document(devRoom).collection("Devices")
+                .add(device)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(DTAG, "Device successfully added to assigned room");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(DTAG, "Could not add device to assigned room", e);
+                    }
+                });
+    }
+
+    private void deleteDevice(){
+        deviceNickname_text = (EditText) findViewById(R.id.deviceNickname_text);
+        assignedRoom_Spinner = (Spinner) findViewById(R.id.assignedRoom_Spinner);
+        String devRoom = assignedRoom_Spinner.getOnItemSelectedListener().toString();
+        String devName = deviceNickname_text.getText().toString();
+
+        DocumentReference device = datab.collection("rooms").document(devRoom).collection("Devices").document(devName);
+        device
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(DTAG, "Deleted device");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(DTAG, "Could not delete device", e);
+                    }
+                });
     }
 }

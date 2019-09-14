@@ -1,33 +1,47 @@
 package team33.ec463.com.ec463team33miniproject;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class AddRoom extends AppCompatActivity {
+
+    private TextView roomName_textview;
+    private EditText roomNickname_text;
+    private TextView errorName_textview;
+    private Button cancel_Button;
+    private Button done_Button;
+    private FirebaseFirestore datab = FirebaseFirestore.getInstance();
+    private static final String RTAG = "Rooms";
+    private static final String DTAG = "Devices";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_room);
 
-        // Create a reference to the roomName_textview field
-        TextView roomName_textview = (TextView) findViewById(R.id.roomName_textview);
+        roomName_textview = (TextView) findViewById(R.id.roomName_textview);
+        roomNickname_text = (EditText) findViewById(R.id.roomNickname_text);
+        errorName_textview = (TextView) findViewById(R.id.nameError_textview);
+        cancel_Button = (Button) findViewById(R.id.cancel_Button);
+        done_Button = (Button) findViewById(R.id.done_Button);
 
-        // Create a reference to the roomNickname_text field
-        final EditText roomNickname_text = (EditText) findViewById(R.id.roomNickname_text);
-
-        // Create a reference to the nameError_textview field
-        final TextView errorName_textview = (TextView) findViewById(R.id.nameError_textview);
         errorName_textview.setVisibility(View.INVISIBLE);
-
-        // Create a reference to the Cancel button
-        Button cancel_Button = (Button) findViewById(R.id.cancel_Button);
         cancel_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -38,8 +52,6 @@ public class AddRoom extends AppCompatActivity {
             }
         });
 
-        // Create a reference to the Done button
-        Button done_Button = (Button) findViewById(R.id.done_Button);
         done_Button.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +66,7 @@ public class AddRoom extends AppCompatActivity {
                     errorName_textview.setVisibility(View.INVISIBLE);
 
                     // Save the Room to the user's account
-                    // TODO
+                    addNewRoom();
 
                     // Return to the Rooms Activity while passing the text for a new room
                     Intent roomsIntent = new Intent(getApplicationContext(), Rooms.class);
@@ -69,5 +81,27 @@ public class AddRoom extends AppCompatActivity {
 
 
         }));
+    }
+
+    private void addNewRoom(){
+        roomNickname_text = (EditText) findViewById(R.id.roomNickname_text);
+        String roomName = roomNickname_text.getText().toString();
+        Map<String, Object> newRoom = new HashMap<>();
+        newRoom.put("Name", roomName);
+
+        datab.collection("rooms")
+                .add(newRoom)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(RTAG,"Added new room");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(RTAG, "Could not add new room", e);
+                    }
+                });
     }
 }
