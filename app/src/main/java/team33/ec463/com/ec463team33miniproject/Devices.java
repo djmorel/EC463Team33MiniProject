@@ -19,6 +19,11 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class Devices extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,6 +33,9 @@ public class Devices extends AppCompatActivity
     DrawerLayout drawer;
     NavigationView navigationView;
     FirebaseFirestore datab = FirebaseFirestore.getInstance();
+    ListView deviceList;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> deviceNames = new ArrayList<>();  // As of now, this resets list when the page opens...
 
     // Pull the Devices list from the user's account
     // TODO
@@ -55,7 +63,31 @@ public class Devices extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+// ListView setup
+        deviceList = (ListView) findViewById(R.id.deviceList);
 
+        // Setup the Array Adapter
+        adapter = new ArrayAdapter<String>(Devices.this, android.R.layout.simple_list_item_1,
+                deviceNames);
+
+        // Add Room Name to the ListView
+        String nickname = getIntent().getStringExtra("deviceNickname");
+        if(nickname != null)
+        {
+            deviceNames.add(nickname);
+            adapter.notifyDataSetChanged();
+        }
+
+        // Make the list view interactive
+        deviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent editDeviceIntent = new Intent(Devices.this, EditDevice.class);
+                editDeviceIntent.putExtra("DeviceName", deviceList.getItemAtPosition(position).toString());
+                startActivity(editDeviceIntent);
+            }
+        });
+        deviceList.setAdapter(adapter);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
