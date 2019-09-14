@@ -5,21 +5,26 @@ import java.util.concurrent.TimeUnit;
 public class Device {
     String name;
     String type;
-    int idVal;
+    String idVal;
+    String room;
     boolean isActive;
     static double data;
 
     public Device(){}
 
-    public void setName(String newName){
-        name = newName;
-    }
+    public void setName(String newName){ name = newName; }
+
+    public void setType(String newType) { type = newType; }
+
+    public void setIdVal(String newID) { idVal = newID; }
+
+    public void setRoom(String newRoom) { room = newRoom; }
 
     public String getName(){
         return name;
     }
 
-    public int getIdVal(){
+    public String getIdVal(){
         return idVal;
     }
 
@@ -27,10 +32,13 @@ public class Device {
         return type;
     }
 
-    public Device(String myName, String myType, int myIdVal){
+    public String getRoom() { return room; }
+
+    public Device(String myName, String myType, String myIdVal, String myRoom){
         name = myName;
         type = myType;
         idVal = myIdVal;
+        room = myRoom;
         isActive = true;
     }
 
