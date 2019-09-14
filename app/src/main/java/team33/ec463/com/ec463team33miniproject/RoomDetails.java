@@ -13,7 +13,9 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -32,6 +34,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Collection;
+
 public class RoomDetails extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -40,7 +44,7 @@ public class RoomDetails extends AppCompatActivity
     TextView targetRoomName;
     Button deleteRoom_button;
     final TextView roomNickname_text = (TextView) findViewById(R.id.targetRoomName_textview);
-
+    private CollectionReference roomColRef = FirebaseFirestore.getInstance().collection("Rooms");
     private static final String RTAG = "Rooms";
 
     @Override
@@ -49,7 +53,6 @@ public class RoomDetails extends AppCompatActivity
         setContentView(R.layout.activity_room_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -110,6 +113,7 @@ public class RoomDetails extends AppCompatActivity
                 // Search the user's list of rooms for the specified room
 
                 // Remove the current room from the list
+                //deleteRoom();
 
                 // Return to the Rooms page
                 Intent roomsIntent = new Intent(getApplicationContext(), Rooms.class);
@@ -165,10 +169,10 @@ public class RoomDetails extends AppCompatActivity
         return true;
     }
 
-    private void deleteRoom() {
+    public void deleteRoom() {
         String name = roomNickname_text.getText().toString();
-        //delete device from specified room subcollection
-        final DocumentReference deviceRef = Rooms.datab.collection("rooms").document(name);
+        //delete room from specified rooms collection
+        final DocumentReference deviceRef = roomColRef.document(name);
         deviceRef
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

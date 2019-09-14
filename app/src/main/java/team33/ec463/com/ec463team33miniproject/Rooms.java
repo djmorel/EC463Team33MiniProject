@@ -35,7 +35,7 @@ public class Rooms extends AppCompatActivity
     // For now, default it to an empty list
     // TODO
     ArrayList<String> roomNames = new ArrayList<>();  // As of now, this resets list when the page opens...
-    static FirebaseFirestore datab = FirebaseFirestore.getInstance();
+    private FirebaseFirestore datab;
     ArrayAdapter<String> adapter;
     ListView roomList;
 
@@ -45,6 +45,7 @@ public class Rooms extends AppCompatActivity
         //~~~~~~~~~~ Beginning of Navigation Drawer default setup ~~~~~~~~~~//
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rooms);
+        datab = FirebaseFirestore.getInstance();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

@@ -17,11 +17,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import org.w3c.dom.Text;
@@ -44,13 +47,14 @@ public class AddDevice extends AppCompatActivity implements AdapterView.OnItemSe
     TextView deviceID_textview = (TextView) findViewById(R.id.deviceID_textview);
     final EditText deviceID_text = (EditText) findViewById(R.id.deviceID_text);
     final TextView invalidID_textview = (TextView) findViewById(R.id.invalidID_textview);
+    private CollectionReference roomColRef = FirebaseFirestore.getInstance().collection("Rooms");
+
     private static final String DTAG = "Devices";
     private static final String RTAG = "Rooms";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_device);
-
 
         invalidID_textview.setVisibility(View.INVISIBLE);
         errorDeviceName_textview.setVisibility(View.INVISIBLE);
@@ -120,7 +124,7 @@ public class AddDevice extends AppCompatActivity implements AdapterView.OnItemSe
                     // Turn off name error
                     errorDeviceName_textview.setVisibility(View.INVISIBLE);
 
-                    addDevice();
+                    //addDevice();
                     //set device name
                     Intent devicesIntent = new Intent(getApplicationContext(), Devices.class);
                     startActivity(devicesIntent);
@@ -233,7 +237,7 @@ public class AddDevice extends AppCompatActivity implements AdapterView.OnItemSe
         // Ignore
     }
 
-    private void addDevice(){
+    public void addDevice(){
         String idVal = deviceID_text.getText().toString();
         String name = deviceNickname_text.getText().toString();
         String room = assignedRoom_Spinner.getOnItemSelectedListener().toString();
@@ -245,11 +249,12 @@ public class AddDevice extends AppCompatActivity implements AdapterView.OnItemSe
         newDev.put("Device Type", type);
         newDev.put("Assigned Room", room);
 
-        Rooms.datab.collection("Rooms").document(room).collection("Devices").add(newDev)
+        roomColRef.document(room).collection("Devices")
+                .add(newDev)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentRef) {
-                        Log.d(DTAG, "Added new device with ID: " + documentRef.getId());
+                        Log.d(DTAG, "Added new device");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -259,7 +264,7 @@ public class AddDevice extends AppCompatActivity implements AdapterView.OnItemSe
                     }
                 });
         //add a snapshot listener whenever a new device is added to listen for new data
-        final DocumentReference deviceRef = Rooms.datab.collection("rooms").document(room).collection("devices").document(name);
+        final DocumentReference deviceRef = roomColRef.document(room).collection("devices").document(name);
         deviceRef
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override

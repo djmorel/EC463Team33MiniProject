@@ -14,11 +14,14 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +33,7 @@ public class AddRoom extends AppCompatActivity {
 
     // Create a reference to the Cancel button
     Button cancel_Button = (Button) findViewById(R.id.cancel_Button);
+    private CollectionReference roomColRef = FirebaseFirestore.getInstance().collection("Rooms");
     private static final String RTAG = "Rooms";
 
     @Override
@@ -63,7 +67,7 @@ public class AddRoom extends AppCompatActivity {
                     errorName_textview.setVisibility(View.INVISIBLE);
 
                     // Save the Room to the user's account
-                    addRoom();
+                    //addRoom();
 
                     // Return to the Rooms Activity while passing the text for a new room
                     Intent roomsIntent = new Intent(getApplicationContext(), Rooms.class);
@@ -78,19 +82,19 @@ public class AddRoom extends AppCompatActivity {
         }));
     }
 
-    private void addRoom(){
+    public void addRoom(){
         String name = roomNickname_text.getText().toString();
 
         Map<String, Object> newRoom = new HashMap<>();
         newRoom.put("Name", name);
 
-        Rooms.datab.collection("Rooms").add(newRoom)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentRef) {
-                        Log.d(RTAG, "Added new room: " + documentRef.getId());
-                    }
-                })
+        roomColRef.add(newRoom)
+               .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                   @Override
+                   public void onSuccess(DocumentReference documentReference) {
+                       Log.d(RTAG, "Added new room");
+                   }
+               })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {

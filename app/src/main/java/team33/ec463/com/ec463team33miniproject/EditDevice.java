@@ -18,7 +18,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Text;
 
@@ -39,15 +41,13 @@ public class EditDevice extends AppCompatActivity implements AdapterView.OnItemS
     TextView devicePrintedID_textview = (TextView) findViewById(R.id.devicePrintedID_textview);
     TextView assignedRoom_textview = (TextView) findViewById(R.id.assignedRoom_textview);
     final Spinner assignedRoom_Spinner = (Spinner) findViewById(R.id.assignedRoom_Spinner);
+    private CollectionReference roomColRef = FirebaseFirestore.getInstance().collection("Rooms)");
     private static final String DTAG = "Devices";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_device);
-
-
-
         // Set errorDeviceName_textview to invisible by default
         errorDeviceName_textview.setVisibility(View.INVISIBLE);
 
@@ -61,7 +61,7 @@ public class EditDevice extends AppCompatActivity implements AdapterView.OnItemS
 
                 // TODO
                 // Search the user's account for the device, then remove it
-                deleteDevice();
+                //deleteDevice();
                 // Return to the Devices Activity
                 Intent devicesIntent = new Intent(getApplicationContext(), Devices.class);
                 startActivity(devicesIntent);
@@ -154,11 +154,11 @@ public class EditDevice extends AppCompatActivity implements AdapterView.OnItemS
     public void onNothingSelected(AdapterView<?> parent) {
         // Ignore
     }
-    private void deleteDevice() {
+    public void deleteDevice() {
         String name = deviceNickname_text.getText().toString();
         String room = assignedRoom_Spinner.getOnItemSelectedListener().toString();
         //delete device from specified room subcollection
-        final DocumentReference deviceRef = Rooms.datab.collection("rooms").document(room).collection("devices").document(name);
+        final DocumentReference deviceRef = roomColRef.document(room).collection("devices").document(name);
         deviceRef
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
