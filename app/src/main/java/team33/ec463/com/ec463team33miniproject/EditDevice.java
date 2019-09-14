@@ -74,7 +74,9 @@ public class EditDevice extends AppCompatActivity implements AdapterView.OnItemS
 
                 // TODO
                 // Search the user's account for the device, then remove it
-                deleteDevice();
+                String deviceRoom = assignedRoom_Spinner.getOnItemSelectedListener().toString();
+                String deviceName = deviceNickname_text.getText().toString();
+                deleteDevice(deviceRoom, deviceName);
 
                 // Return to the Devices Activity
                 Intent devicesIntent = new Intent(getApplicationContext(), Devices.class);
@@ -209,11 +211,11 @@ public class EditDevice extends AppCompatActivity implements AdapterView.OnItemS
                 });
     }
 
-    private void deleteDevice(){
-        deviceNickname_text = (EditText) findViewById(R.id.deviceNickname_text);
+    private void deleteDevice(String devRoom, String devName){
+        /*deviceNickname_text = (EditText) findViewById(R.id.deviceNickname_text);
         assignedRoom_Spinner = (Spinner) findViewById(R.id.assignedRoom_Spinner);
         String devRoom = assignedRoom_Spinner.getOnItemSelectedListener().toString();
-        String devName = deviceNickname_text.getText().toString();
+        String devName = deviceNickname_text.getText().toString();*/
 
         DocumentReference device = datab.collection("rooms").document(devRoom).collection("Devices").document(devName);
         device

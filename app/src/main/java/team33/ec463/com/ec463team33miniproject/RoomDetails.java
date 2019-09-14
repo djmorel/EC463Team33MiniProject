@@ -115,9 +115,9 @@ public class RoomDetails extends AppCompatActivity
                 String room_delete = targetRoomName.getText().toString();
 
                 // Search the user's list of rooms for the specified room
-
+                // TODO
                 // Remove the current room from the list
-                deleteRoom();
+                deleteRoom(room_delete);
 
                 // Return to the Rooms page
                 Intent roomsIntent = new Intent(getApplicationContext(), Rooms.class);
@@ -173,9 +173,9 @@ public class RoomDetails extends AppCompatActivity
         return true;
     }
 
-    private void deleteRoom(){
-        targetRoomName = (TextView) findViewById(R.id.targetRoomName_textview);
-        String roomName = targetRoomName.getText().toString();
+    private void deleteRoom(String roomName){
+        /*targetRoomName = (TextView) findViewById(R.id.targetRoomName_textview);
+        String roomName = targetRoomName.getText().toString();*/
 
         DocumentReference room = datab.collection("rooms").document(roomName);
         room

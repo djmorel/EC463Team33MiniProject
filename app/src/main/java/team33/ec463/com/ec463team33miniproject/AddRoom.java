@@ -66,7 +66,7 @@ public class AddRoom extends AppCompatActivity {
                     errorName_textview.setVisibility(View.INVISIBLE);
 
                     // Save the Room to the user's account
-                    addNewRoom();
+                    addNewRoom(nickname);
 
                     // Return to the Rooms Activity while passing the text for a new room
                     Intent roomsIntent = new Intent(getApplicationContext(), Rooms.class);
@@ -83,13 +83,13 @@ public class AddRoom extends AppCompatActivity {
         }));
     }
 
-    private void addNewRoom(){
-        roomNickname_text = (EditText) findViewById(R.id.roomNickname_text);
-        String roomName = roomNickname_text.getText().toString();
+    private void addNewRoom(String roomName){
+        /*roomNickname_text = (EditText) findViewById(R.id.roomNickname_text);
+        String roomName = roomNickname_text.getText().toString();*/
         Map<String, Object> newRoom = new HashMap<>();
         newRoom.put("Name", roomName);
 
-        datab.collection("rooms")
+        datab.collection("Rooms")
                 .add(newRoom)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override

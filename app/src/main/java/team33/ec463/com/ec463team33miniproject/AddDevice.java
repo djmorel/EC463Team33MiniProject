@@ -73,7 +73,7 @@ public class AddDevice extends AppCompatActivity {
                         validID = true;
 
                         // Record the sensor in the user's account on Firebase
-                        addNewDevice();
+                        addNewDevice(deviceID);
                     }
 
                     // Handle valid and invalid device IDs
@@ -101,17 +101,17 @@ public class AddDevice extends AppCompatActivity {
         });
     }
 
-    private void addNewDevice(){
-        deviceID_text = (EditText) findViewById(R.id.deviceID_text);
-        String devID = deviceID_text.getText().toString();
+    private void addNewDevice(String devID){
+        /*deviceID_text = (EditText) findViewById(R.id.deviceID_text);
+        String devID = deviceID_text.getText().toString();*/
         Map<String, Object> newDev = new HashMap<>();
         newDev.put("Device ID", devID);
-        newDev.put("Name", "");
-        newDev.put("Assigned Room", "");
-        newDev.put("Device Type", "");
+        newDev.put("Name", " ");
+        newDev.put("Assigned Room", " ");
+        newDev.put("Device Type", " ");
         newDev.put("Data", 0);
 
-        datab.collection("New Devices")
+        datab.collection("NewDevices")
                 .add(newDev)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
