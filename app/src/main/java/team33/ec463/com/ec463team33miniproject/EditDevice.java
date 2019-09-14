@@ -89,6 +89,13 @@ public class EditDevice extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             public void onClick(View v) {
 
+                deviceNickname_text = (EditText) findViewById(R.id.deviceNickname_text);
+                assignedRoom_Spinner = (Spinner) findViewById(R.id.assignedRoom_Spinner);
+                devicePrintedID_textview = (TextView) findViewById(R.id.devicePrintedID_textview);
+                String devName = deviceNickname_text.getText().toString();
+                String devRoom = assignedRoom_Spinner.getOnItemSelectedListener().toString();
+                String devID = devicePrintedID_textview.getText().toString();
+
                 if(deviceNickname_text.getText().toString().trim().length() != 0)
                 {
                     // Remove the name error message (if even present)
@@ -96,7 +103,7 @@ public class EditDevice extends AppCompatActivity implements AdapterView.OnItemS
 
                     // TODO
                     // Save the settings to the user's account
-                    editDevice();
+                    editDevice(devName, devRoom, devID);
 
                     // Return to the Devices Activity
                     Intent devicesIntent = new Intent(getApplicationContext(), Devices.class);
@@ -172,13 +179,13 @@ public class EditDevice extends AppCompatActivity implements AdapterView.OnItemS
         // Ignore
     }
 
-    private void editDevice(){
-        deviceNickname_text = (EditText) findViewById(R.id.deviceNickname_text);
+    private void editDevice(String devName, String devRoom, String devID){
+        /*deviceNickname_text = (EditText) findViewById(R.id.deviceNickname_text);
         assignedRoom_Spinner = (Spinner) findViewById(R.id.assignedRoom_Spinner);
         devicePrintedID_textview = (TextView) findViewById(R.id.devicePrintedID_textview);
         String devName = deviceNickname_text.getText().toString();
         String devRoom = assignedRoom_Spinner.getOnItemSelectedListener().toString();
-        String devID = devicePrintedID_textview.getText().toString();
+        String devID = devicePrintedID_textview.getText().toString();*/
 
         DocumentReference device = datab.collection("New Devices").document(devID);
         device.update("Name", devName);
