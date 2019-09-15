@@ -7,8 +7,8 @@
     android:layout_height="match_parent"
     android:padding="6dip"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Rooms"
-    tools:showIn="@layout/app_bar_rooms"
+    tools:context=".Devices"
+    tools:showIn="@layout/app_bar_devices"
     >
 
     <ListView

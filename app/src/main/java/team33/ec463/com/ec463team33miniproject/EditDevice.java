@@ -202,23 +202,23 @@ public class EditDevice extends AppCompatActivity implements AdapterView.OnItemS
             }
         });
 
-        datab.collection("rooms").document(devRoom).collection("Devices")
-                .add(device)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        datab.collection("rooms").document(devRoom).collection("Devices").document(devName)
+                .set(device)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(DTAG, "Device successfully added to assigned room");
+                    public void onSuccess(Void aVoid) {
+                        Log.d(DTAG, "Device successfully assigned to room");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(DTAG, "Could not add device to assigned room", e);
+                        Log.d(DTAG, "Could not assign device to room");
                     }
                 });
     }
 
-    private void deleteDevice(String devRoom, String devName){
+    public void deleteDevice(String devRoom, String devName){
         /*deviceNickname_text = (EditText) findViewById(R.id.deviceNickname_text);
         assignedRoom_Spinner = (Spinner) findViewById(R.id.assignedRoom_Spinner);
         String devRoom = assignedRoom_Spinner.getOnItemSelectedListener().toString();

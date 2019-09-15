@@ -14,13 +14,18 @@ import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -33,6 +38,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class RoomDetails extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -68,18 +77,40 @@ public class RoomDetails extends AppCompatActivity
         // Connect the layout elements to variables
         targetRoomName = (TextView) findViewById(R.id.targetRoomName_textview);
         deleteRoom_button = (Button) findViewById(R.id.deleteRoom_Button);
-
+        String roomName = targetRoomName.getText().toString();
         // Data values for the plot
         double x = 1.0;
         double y;
         double[] temp = new double[]{349, 344, 339, 334, 331, 327, 325, 323, 321, 338, 340, 341, 346, 342, 344};
 
+        /*snapshot listener to get new temp and humidity data in real time
+        final List<Double> data = new ArrayList<>();
+        datab.collection("Rooms").document(roomName).collection("Devices")
+                .whereEqualTo("Assigned Room", roomName)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if(e != null){
+                            Log.w(RTAG, "Could not listen to new device data", e);
+                            return;
+                        }
+
+                        for(QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                            if (doc.get("Data") != null) {
+                                data.add(doc.getDouble("Data"));
+                            }
+                        }
+                        Log.d(RTAG, "Updating new data from devices");
+                    }
+                });*/
+
+        //do random data generation here instead of in device object
         graph = (GraphView) findViewById(R.id.graph);
         series = new LineGraphSeries<DataPoint>();
-        for(int i = 0; i < 15; i++)
+        for(int i = 0; i < data.size(); i++)
         {
             x++;
-            y = temp[i] / 10.0;
+            y = data.get(i);
             series.appendData(new DataPoint(x,y), true, 100);
         }
         graph.addSeries(series);
@@ -173,7 +204,7 @@ public class RoomDetails extends AppCompatActivity
         return true;
     }
 
-    private void deleteRoom(String roomName){
+    public void deleteRoom(String roomName){
         /*targetRoomName = (TextView) findViewById(R.id.targetRoomName_textview);
         String roomName = targetRoomName.getText().toString();*/
 

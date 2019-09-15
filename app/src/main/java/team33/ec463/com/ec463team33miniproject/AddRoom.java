@@ -89,11 +89,11 @@ public class AddRoom extends AppCompatActivity {
         Map<String, Object> newRoom = new HashMap<>();
         newRoom.put("Name", roomName);
 
-        datab.collection("Rooms")
-                .add(newRoom)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        datab.collection("Rooms").document(roomName)
+                .set(newRoom)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Void aVoid) {
                         Log.d(RTAG,"Added new room");
                     }
                 })
