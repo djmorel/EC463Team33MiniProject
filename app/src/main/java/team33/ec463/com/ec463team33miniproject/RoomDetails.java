@@ -81,9 +81,9 @@ public class RoomDetails extends AppCompatActivity
         // Data values for the plot
         double x = 1.0;
         double y;
-        double[] temp = new double[]{349, 344, 339, 334, 331, 327, 325, 323, 321, 338, 340, 341, 346, 342, 344};
+        //double[] temp = new double[]{349, 344, 339, 334, 331, 327, 325, 323, 321, 338, 340, 341, 346, 342, 344};
 
-        /*snapshot listener to get new temp and humidity data in real time
+        //snapshot listener to get new temp and humidity data in real time
         final List<Double> data = new ArrayList<>();
         datab.collection("Rooms").document(roomName).collection("Devices")
                 .whereEqualTo("Assigned Room", roomName)
@@ -102,9 +102,8 @@ public class RoomDetails extends AppCompatActivity
                         }
                         Log.d(RTAG, "Updating new data from devices");
                     }
-                });*/
+                });
 
-        //do random data generation here instead of in device object
         graph = (GraphView) findViewById(R.id.graph);
         series = new LineGraphSeries<DataPoint>();
         for(int i = 0; i < data.size(); i++)
